@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeftIcon, FireIcon, BeakerIcon, SunIcon as SunOutlineIcon, CloudIcon, CalendarDaysIcon } from "@heroicons/react/24/outline";
-import { SunIcon } from "@heroicons/react/24/solid";
-import { CloudIcon as CloudSolidIcon, SunIcon as SunSolidIcon } from "@heroicons/react/24/solid";
+import { ArrowLeftIcon, FireIcon, BeakerIcon, CalendarDaysIcon } from "@heroicons/react/24/outline";
 import "./DetailsPage.css";
 
 const API_KEY = "3c3cc806814b733612a0db2378d0c1bd";
@@ -35,27 +33,53 @@ function DetailsPage() {
   };
 
   // Get weather icon based on condition
-  const getWeatherIcon = (weatherMain, size = "w-12 h-12") => {
-    const iconClass = `${size} text-white`;
+  const getWeatherIcon = (weatherMain, size = "w-24 h-24") => {
+    const iconClass = `${size} text-white flex items-center justify-center`;
+
+    // Debug: log the weather condition
+    console.log("Weather condition:", weatherMain);
 
     switch (weatherMain) {
       case "Clear":
-        return <SunSolidIcon className={iconClass} />;
+      case "clear":
+        return <i className={`fa-solid fa-sun ${iconClass}`}></i>;
       case "Clouds":
-        return <CloudSolidIcon className={iconClass} />;
+      case "clouds":
+        return <i className={`fa-solid fa-cloud ${iconClass}`}></i>;
       case "Rain":
-        return <CloudSolidIcon className={iconClass} />;
+      case "rain":
+        return <i className={`fa-solid fa-cloud-showers-heavy ${iconClass}`}></i>;
       case "Drizzle":
-        return <CloudSolidIcon className={iconClass} />;
+      case "drizzle":
+        return <i className={`fa-solid fa-cloud-rain ${iconClass}`}></i>;
       case "Thunderstorm":
-        return <CloudSolidIcon className={iconClass} />;
+      case "thunderstorm":
+        return <i className={`fa-solid fa-bolt ${iconClass}`}></i>;
       case "Snow":
-        return <CloudSolidIcon className={iconClass} />;
+      case "snow":
+        return <i className={`fa-solid fa-snowflake ${iconClass}`}></i>;
       case "Mist":
+      case "mist":
       case "Fog":
-        return <CloudSolidIcon className={iconClass} />;
+      case "fog":
+        return <i className={`fa-solid fa-smog ${iconClass}`}></i>;
+      case "Atmosphere":
+        return <i className={`fa-solid fa-smog ${iconClass}`}></i>;
       default:
-        return <SunSolidIcon className={iconClass} />;
+        // Try to match partial strings
+        if (weatherMain && weatherMain.toLowerCase().includes("rain")) {
+          return <i className={`fa-solid fa-cloud-showers-heavy ${iconClass}`}></i>;
+        }
+        if (weatherMain && weatherMain.toLowerCase().includes("snow")) {
+          return <i className={`fa-solid fa-snowflake ${iconClass}`}></i>;
+        }
+        if (weatherMain && weatherMain.toLowerCase().includes("clear")) {
+          return <i className={`fa-solid fa-sun ${iconClass}`}></i>;
+        }
+        if (weatherMain && weatherMain.toLowerCase().includes("cloud")) {
+          return <i className={`fa-solid fa-cloud ${iconClass}`}></i>;
+        }
+        return <i className={`fa-solid fa-sun ${iconClass}`}></i>;
     }
   };
 
@@ -165,13 +189,13 @@ function DetailsPage() {
             {/* Floating Weather Icons */}
             <div className="flex justify-center gap-8">
               <div className="animate-bounce" style={{ animationDuration: "2s" }}>
-                <SunIcon className="w-8 h-8 text-white/60" />
+                <i className="fa-solid fa-sun w-8 h-8 text-white/60 flex items-center justify-center"></i>
               </div>
               <div className="animate-bounce" style={{ animationDuration: "2.5s", animationDelay: "0.3s" }}>
-                <CloudIcon className="w-8 h-8 text-white/60" />
+                <i className="fa-solid fa-cloud w-8 h-8 text-white/60 flex items-center justify-center"></i>
               </div>
               <div className="animate-bounce" style={{ animationDuration: "3s", animationDelay: "0.6s" }}>
-                <CloudIcon className="w-8 h-8 text-white/60" />
+                <i className="fa-solid fa-cloud w-8 h-8 text-white/60 flex items-center justify-center"></i>
               </div>
             </div>
           </div>
@@ -221,7 +245,7 @@ function DetailsPage() {
                 <div className="flex items-center justify-center mb-6">
                   <div className="relative group">
                     <div className="transform transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
-                      {getWeatherIcon(weather.weather[0].main, "w-32 h-32")}
+                      {getWeatherIcon(weather.weather[0].description, "w-56 h-56")}
                     </div>
                     <div className="absolute inset-0 bg-white/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   </div>
@@ -255,13 +279,13 @@ function DetailsPage() {
                 </div>
 
                 <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center">
-                  <SunIcon className="w-6 h-6 text-white/80 mx-auto mb-2" />
+                  <i className="fa-solid fa-sun w-6 h-6 text-white/80 mx-auto mb-2 flex items-center justify-center"></i>
                   <p className="text-white/60 text-sm">Wind</p>
                   <p className="text-white font-semibold">{Math.round(weather.wind.speed * 3.6)} km/h</p>
                 </div>
 
                 <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 text-center">
-                  <CloudIcon className="w-6 h-6 text-white/80 mx-auto mb-2" />
+                  <i className="fa-solid fa-cloud w-6 h-6 text-white/80 mx-auto mb-2 flex items-center justify-center"></i>
                   <p className="text-white/60 text-sm">Pressure</p>
                   <p className="text-white font-semibold">{weather.main.pressure} hPa</p>
                 </div>
@@ -302,7 +326,7 @@ function DetailsPage() {
 
                           <div className="flex items-center gap-4">
                             <div className="group transform transition-transform duration-200 hover:scale-110 hover:rotate-12">
-                              {getWeatherIcon(mainItem.weather[0].main)}
+                              {getWeatherIcon(mainItem.weather[0].description)}
                             </div>
 
                             <div className="text-right">
@@ -320,7 +344,7 @@ function DetailsPage() {
             {/* Hourly Forecast */}
             <div className="bg-white/20 backdrop-blur-md rounded-3xl p-8 border border-white/30 shadow-2xl mt-8">
               <h2 className="text-2xl font-semibold text-white mb-6 flex items-center gap-2">
-                <SunIcon className="w-6 h-6 text-white" />
+                <i className="fa-solid fa-sun w-6 h-6 text-white flex items-center justify-center"></i>
                 Hourly Forecast
               </h2>
 
@@ -333,7 +357,7 @@ function DetailsPage() {
                       className="bg-white/10 backdrop-blur-sm rounded-xl p-4 min-w-[100px] text-center hover:bg-white/20 transition-all duration-200"
                     >
                       <p className="text-white/60 text-sm mb-2">{new Date(item.dt_txt).toLocaleTimeString("en-US", { hour: "2-digit", hour12: false })}</p>
-                      <div className="flex justify-center mb-2">{getWeatherIcon(item.weather[0].main, "w-10 h-10")}</div>
+                      <div className="flex justify-center mb-2">{getWeatherIcon(item.weather[0].main, "w-16 h-16")}</div>
                       <p className="text-white font-semibold">{Math.round(item.main.temp)}°</p>
                     </div>
                   ))}

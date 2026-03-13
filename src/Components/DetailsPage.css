@@ -71,6 +71,25 @@
   transition-duration: 150ms;
 }
 
+/* Weather icon sizing - simple and proportional */
+.fa-solid {
+  display: inline-block !important;
+  font-style: normal !important;
+  font-variant: normal !important;
+  text-rendering: auto !important;
+}
+
+/* Make icons size properly within their containers */
+[class*="w-"].fa-solid,
+[class*="h-"].fa-solid,
+[class*="w-"] .fa-solid,
+[class*="h-"] .fa-solid {
+  font-size: inherit !important;
+  width: inherit !important;
+  height: inherit !important;
+  line-height: 1 !important;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
